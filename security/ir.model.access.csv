@@ -1,0 +1,4 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_panels_system_check manager,panels_systemcheck.manager,model_system_check,group_panels_manager,1,1,1,1
+access_panels_system_check_config manager,panels_systemcheck_config.manager,model_system_check_config,group_panels_syscheckconfig,1,1,1,1
+access_panels_system_check_config user,panels_systemcheck_config.user,model_system_check_config,group_panels_manager,1,0,0,0

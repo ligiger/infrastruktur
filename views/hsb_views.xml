@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.actions.act_window" id="system_check_action">
+            <field name="name">System Checks</field>
+            <field name="res_model">system.check</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first Systemcheck
+                </p>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="system_check_config_action">
+            <field name="name">System Check Konfiguration</field>
+            <field name="res_model">system.check.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first Systemcheck
+                </p>
+            </field>
+        </record>
+
+        <!-- top level menu: no parent -->
+        <menuitem id="main_infrastructure_menu" name="Infrastruktur"/>
+        <!-- A first level in the left side menu is needed
+             before using action= attribute -->
+        <menuitem id="panel_menu" name="Heat-Seal-Bonden" parent="main_infrastructure_menu" sequence="2"/>
+        <menuitem id="infra_config" name="Konfigurationen" parent="main_infrastructure_menu" groups="group_panels_manager" sequence="50"/>
+        
+        <!-- the following menuitem should appear *after*
+             its parent openacademy_menu and *after* its
+             action course_list_action -->
+       
+        <menuitem id="system_check_menu" name="System Check" parent="panel_menu"
+                  action="system_check_action"/>
+         <menuitem id="system_check_config_menu" name="System Check Konfiguration" parent="infra_config"
+                  action="system_check_config_action" groups="group_panels_syscheckconfig" sequence="100"/>       
+
+        
+        <!-- system check form view-->  
+        <record model="ir.ui.view" id="system_check_form_view">
+            <field name="name">system.check.form</field>
+            <field name="model">system.check</field>
+            <field name="arch" type="xml">
+                <form string="System Check Form">
+                    <header>
+                        <button name="confirm" string="Bestätigen" type="object" states="draft" class="btn-primary"/>
+                        <button name="edit" string="Auf ENTWURF setzen" type="object" states="confirmed" class="btn-primary" groups="infrastruktur.group_panels_manager"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group>
+                            <field name="date_confirmed"/>
+                            <field name="confirmed_by"/>
+                        </group>
+                            <group string="General">
+                                <field name="system_type" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                        <notebook >
+                        <page string="Pretacking System DT-250">
+                        <group string="Pretacking System DT-250">
+                            <group string="Kraft [N]">
+                                <field name="pt_kraft_soll"/>
+                                <field name="pt_kraft_ist" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group string="Systemkraft [1]">
+                                <field name="pt_force_sys"/>
+                                <field name="pt_force_sys_ist" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group string="Temperatur [°C]">
+                                <field name="pt_temp_soll"/>
+                                <field name="pt_temp_ist" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group string="Systemtemperatur [°C]">
+                                <field name="pt_temp_sys"/>
+                                <field name="pt_temp_sys_ist" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            
+
+                            <group string="Zeit [s]">
+                                <field name="pt_zeit_soll"/>
+                                <field name="pt_zeit_ist" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group> 
+                        </group>
+                        </page>
+                        <page string="Final Bonding System HSB Emerald">
+                        <group string="Final Bonding System HSB Emerald">
+                            <group string="Kraft [N]">
+                                <field name="hsb_kraft_soll"/>
+                                <field name="hsb_kraft_ist" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group string="Systemkraft [1]">
+                                <field name="hsb_force_sys"/>
+                                <field name="hsb_force_sys_ist" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group string="Temperatur [°C]">
+                                <field name="hsb_temp_soll"/>
+                                <field name="hsb_temp_ist" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group string="Systemtemperatur [°C]">
+                                <field name="hsb_temp_sys"/>
+                                <field name="hsb_temp_sys_ist" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group string="Zeit [s]">
+                                <field name="hsb_zeit_soll"/>
+                                <field name="hsb_zeit_ist" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                        </group>
+                        </page>
+                        <page string="Kontrolle Höhe Bondblock">
+                        <group string="Kontrolle Höhe Bondblock">
+                                <field name="height_bond_block" string="Sollhöhe Bondblock [mm]"/>
+                            <group>
+                                <field name="ist_height_bond_block_1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="ist_height_bond_block_2" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="ist_height_bond_block_3" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="ist_height_bond_block_4" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                        </group>
+                        </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+         <record model="ir.ui.view" id="system_check_tree_view">
+            <field name="name">system.check.tree</field>
+            <field name="model">system.check</field>
+            <field name="arch" type="xml">
+                <tree string="System Check Liste">
+                    <field name="name"/>
+                    <field name="system_type"/>
+                    <field name="date_confirmed"/>
+                    <field name="confirmed_by"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- system check configuration form view-->  
+        <record model="ir.ui.view" id="system_check_config_form_view">
+            <field name="name">system.check.config.form</field>
+            <field name="model">system.check.config</field>
+            <field name="arch" type="xml">
+                <form string="System Check Configuration Form">
+                    <sheet>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group string="Pretacking System DT-250">
+                                <field name="pt_kraft_soll"/>
+                                <field name="pt_temp_soll"/>
+                                <field name="pt_zeit_soll"/>
+                                <field name="pt_force_sys"/>
+                                <field name="pt_temp_sys"/>
+                        </group>
+                        <group string="Final Bonding System HSB Emerald">
+                                <field name="hsb_kraft_soll"/>
+                                <field name="hsb_temp_soll"/>
+                                <field name="hsb_zeit_soll"/>
+                                <field name="hsb_force_sys"/>
+                                <field name="hsb_temp_sys"/>                                
+                        </group>
+                        <group string="Kontrolle Höhe Bondblock">
+                                <field name="height_bond_block"/>                               
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+    
+        
+    </data>
+    <data noupdate="1">
+
+    <!--Definition of Sequence System Check -->
+    <!--
+        <record id="seq_sys_check_type" model="ir.sequence.type">	
+            <field name="name">Sequence System Check Type</field>
+            <field name="code">panel.syscheck.sec</field>
+        </record>
+        
+        <record id="seq_sys_check" model="ir.sequence">
+            <field name="name">Sequence System Check</field>
+            <field name="code">panel.syscheck.sec</field>
+            <field name="padding">3</field>
+            <field name="prefix">SC.%(year)s.%(month)s.%(day)s.</field>
+            <field name="suffix"></field>
+        </record>
+-->
+    </data>
+
+</openerp>

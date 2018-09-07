@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+    <menuitem id="infra_mess_menu" name="Messgeräte" parent="main_infrastructure_menu" sequence="1"/>  
+
+    </data>
+</odoo>
